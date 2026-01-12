@@ -92,7 +92,7 @@ const Profile = () => {
   useEffect(() => {
     if (isConnected && !isWriteNewName) {
       const intervalId = setInterval(async () => {
-        const author = await getAuthorByAddress(address)
+        const author = await getAuthorByAddress(address, true)
         setName(author)
       }, 1000)
 

@@ -122,10 +122,17 @@ const Chat = () => {
   }
 
   const getMessage = async index => {
-    for (;;) {
+    for (;window.isConnected;) {
+      console.log(window.isConnected)
       try {
         const contract = await createCallContract()
-        if (!contract) return
+        if (!contract) {
+          return {
+            ts: Date.now(),
+            index,
+            text: ''
+          }
+        }
         const ts = Date.now()
         const message = await contract.getMessage(index)
         const text = message.toString()
@@ -134,11 +141,17 @@ const Chat = () => {
             ts,
             index,
             text
-          } 
+          }
         }
 
         await sleep(5000)
       } catch (e) {}
+    }
+
+    return {
+      ts: Date.now(),
+      index,
+      text: ''
     }
   }
 
@@ -173,6 +186,8 @@ const Chat = () => {
 
   useEffect(() => {
     if (isConnected) {
+      setMessages([])
+      
       let i = 0
         , f = 0
 
@@ -183,7 +198,6 @@ const Chat = () => {
           const authorAddress = await getMessageAuthorAddress(i)
           if (message.text !== '') {
             i++
-            
             setNames(names => names.find(name => name.authorAddress === authorAddress) ? names : [...names, { authorAddress, author: undefined }])
             setMessages(messages => [...messages, { ...message, authorAddress }].sort((a, b) => a.ts - b.ts))
           }
@@ -205,6 +219,10 @@ const Chat = () => {
       return () => clearTimeout(timeId)
     }
   }, [refChat, messages.length])
+
+  useEffect(() => {
+    window.isConnected = isConnected
+  }, [isConnected])
 
   return (
     <Body>      

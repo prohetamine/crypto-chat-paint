@@ -3,7 +3,7 @@ import { bsc } from '@reown/appkit/networks'
 const projectId = '1febfd92481d4ea997711d2ac4a363c0'
     , networks = [bsc]
 
-const contractAddress = '0xE536175586278c91BA7AA03D11703009E099c691'
+const contractAddress = '0x12a342968A15B44cde89202CFfbcF90D621Dc366'
 
 const contractABI = [
   'function getAuthorByAddress(address _address) view returns (string)',
@@ -14,8 +14,8 @@ const contractABI = [
 ]
 
 const metadata = {
-  name: 'test',
-  description: 'test',
+  name: 'CryptoChatPaint',
+  description: 'DApp',
   url: 'https://test.com',
   icons: ['https://test.com/icon.png']
 }

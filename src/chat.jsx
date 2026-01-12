@@ -116,6 +116,7 @@ const Chat = () => {
 
   const getAuthorByAddress = async (address, isNotConnected) => {
     const contract = await createCallContract(isNotConnected)
+    if (!contract) return
     const author = await contract.getAuthorByAddress(address)
     return author.toString()
   }
@@ -124,6 +125,7 @@ const Chat = () => {
     for (;;) {
       try {
         const contract = await createCallContract()
+        if (!contract) return
         const ts = Date.now()
         const message = await contract.getMessage(index)
         const text = message.toString()
@@ -142,6 +144,7 @@ const Chat = () => {
 
   const getMessageAuthorAddress = async index => {
     const contract = await createCallContract()
+    if (!contract) return
     const authorAddress = await contract.getMessageAuthorAddress(index)
     return authorAddress.toString()
   }
@@ -149,6 +152,7 @@ const Chat = () => {
   const addMessage = async text => {
     try {
       const contract = await createCallContract()
+      if (!contract) return
       await contract.addMessage(text)
     } catch (e) {
       console.log(e)

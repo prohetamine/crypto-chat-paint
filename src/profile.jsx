@@ -74,6 +74,7 @@ const Profile = () => {
 
   const getAuthorByAddress = async (address, isNotConnected) => {
     const contract = await createCallContract(isNotConnected)
+    if (!contract) return
     const author = await contract.getAuthorByAddress(address)
     return author.toString()
   }
@@ -81,6 +82,7 @@ const Profile = () => {
   const setAuthor = async name => {
      try {
       const contract = await createCallContract()
+      if (!contract) return
       await contract.setAuthorname(name)
     } catch (e) {
       console.log(e)

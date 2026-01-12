@@ -16,8 +16,8 @@ const contractABI = [
 const metadata = {
   name: 'CryptoChatPaint',
   description: 'DApp',
-  url: 'https://test.com',
-  icons: ['https://test.com/icon.png']
+  url: 'https://prohetamine.github.io/crypto-chat-paint/',
+  icons: ['https://prohetamine.github.io/crypto-chat-paint/icon.svg']
 }
 
 export default {

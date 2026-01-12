@@ -1,0 +1,25 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-color: #444;
+  background-size: cover;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.link, .link:active {
+  color: #CBDD01;
+}
+
+.link:hover {
+  color: #EAFF00;
+}

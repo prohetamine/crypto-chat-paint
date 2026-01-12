@@ -123,7 +123,6 @@ const Chat = () => {
 
   const getMessage = async index => {
     for (;window.isConnected;) {
-      console.log(window.isConnected)
       try {
         const contract = await createCallContract()
         if (!contract) {

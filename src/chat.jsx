@@ -235,7 +235,7 @@ const Chat = () => {
               <Message key={message.ts} style={message.authorAddress === address ? { marginLeft: 'auto', background: '#ffffffff' } : {}}>
                 <Author style={{ color: color }}>
                   {message.authorAddress === address ? '' : `${(names.find(names => names.authorAddress === message.authorAddress)?.author || 'load...')}:`}
-                  <Text style={message.authorAddress === address ? {} : { marginLeft: '300px' }}>{message.text}</Text>
+                  <Text style={message.authorAddress === address ? { marginLeft: '0px' } : {}}>{message.text}</Text>
                 </Author>
               </Message>
             )

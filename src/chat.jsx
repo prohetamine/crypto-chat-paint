@@ -251,7 +251,7 @@ const Chat = () => {
                   {
                     $address 
                       ? (
-                        <MiniCanvas address={$address} index={index} />
+                        <MiniCanvas address={$address} index={index} onRemove={() => setMessages(messages => messages.filter(m => m.ts !== message.ts))} />
                       )
                       : (
                         <Text style={message.authorAddress === address ? { marginLeft: '0px' } : {}}>{message.text}</Text>

@@ -14,7 +14,7 @@ const Canvas = styled.canvas`
   background:#676;
 `
 
-const MiniCanvas = ({ address: _address, index }) => {
+const MiniCanvas = ({ address: _address, index, onRemove }) => {
   const { open } = useAppKit()
   const { address, isConnected } = useAppKitAccount({ namespace: 'eip155' })
   const { walletProvider } = useAppKitProvider('eip155')
@@ -129,7 +129,16 @@ const MiniCanvas = ({ address: _address, index }) => {
     }
   }, [refCanvas, draw])
 
-  return (    
+  const { color } = draw.data[draw.data.length - 1] || ({ color: '#fff' })
+  const _color = ['#fff', '#000', 'red', 'blue', 'green', 'pink', '#f3dc1d'].find(_color => _color === color) || '#fff'
+  
+  useEffect(() => {
+    if (_color === '#000' || (draw.data.length !== 0 && draw.data.length < 4)) {
+      onRemove()
+    }
+  }, [onRemove, _color, draw.data])
+
+  return (
     <Canvas ref={refCanvas}></Canvas>
   )
 }

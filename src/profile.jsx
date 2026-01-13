@@ -6,12 +6,13 @@ import { useEffect, useState } from 'react'
 import { useAppKit, useAppKitAccount, useAppKitProvider } from '@reown/appkit/react'
 import { BrowserProvider, Contract } from 'ethers'
 import { styled } from 'styled-components'
+import { motion } from 'framer-motion'
 import sleep from 'sleep-promise'
 import config from './config'
 
-const Body = styled.div`
+const Body = styled(motion.div)`
   position: absolute;
-  right: 0px;
+  right: 15px;
   bottom: 300px;
   background: #21ff4a1c;
   border: 1px solid #32ff6fd4;
@@ -101,7 +102,7 @@ const Profile = () => {
   }, [isConnected, getAuthorByAddress, isWriteNewName, address])
 
   return (
-    <Body>
+    <Body drag>
       <Navigation>
         <Input 
           placeholder='Your name...'

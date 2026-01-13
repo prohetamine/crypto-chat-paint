@@ -6,18 +6,18 @@ import { useEffect, useRef, useState } from 'react'
 import { useAppKit, useAppKitAccount, useAppKitProvider } from '@reown/appkit/react'
 import { BrowserProvider, Contract } from 'ethers'
 import { styled } from 'styled-components'
+import { motion } from 'framer-motion'
 import sleep from 'sleep-promise'
 import config from './config'
 import MiniCanvas from './mini-canvas.jsx'
 
-const Body = styled.div`
+const Body = styled(motion.div)`
   position: absolute;
-  bottom: 0px;
-  right: 0px;
+  bottom: 15px;
+  right: 15px;
   background: #21ff4a1c;
-  border-left: 1px solid #32ff6fd4;
-  border-top: 1px solid #32ff6fd4;
-  border-radius: 10px 0px 0px 0px;
+  border: 1px solid #32ff6fd4;
+  border-radius: 4px;
 `
 
 const MessagesOverflow = styled.div`
@@ -229,7 +229,7 @@ const Chat = () => {
   }, [isConnected])
 
   return (
-    <Body>      
+    <Body drag>      
       <MessagesOverflow ref={refChat}>
         {
           messages.map(message => {

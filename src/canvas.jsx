@@ -6,20 +6,18 @@ import { useEffect, useRef, useState } from 'react'
 import { useAppKit, useAppKitAccount, useAppKitProvider } from '@reown/appkit/react'
 import { BrowserProvider, Contract } from 'ethers'
 import { styled } from 'styled-components'
+import { motion } from 'framer-motion'
 import sleep from 'sleep-promise'
 import config from './config'
 
-const Body = styled.div`
+const Body = styled(motion.div)`
   background: #21ff4a1c;
-  position: absolute;
-  left: 15px;
-  top: 15px;
   display: flex;
   flex-direction: column;
   border-radius: 10px 0px 0px 0px;
 `
 
-const Canvas = styled.canvas`
+const Canvas = styled(motion.canvas)`
   background: #21ff4a1c;
   border: 1px solid #32ff6fd4;
 `
@@ -35,7 +33,13 @@ const Button = styled.button`
   box-sizing: border-box;
   font-family: "SUSE Mono", sans-serif;
   font-size: 13px;
-  margin-top: 10px;
+`
+
+const Navigation = styled(motion.div)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
 `
 
 const CanvasComponent = () => {
@@ -232,16 +236,22 @@ const CanvasComponent = () => {
 
       render()
 
-      const handleMouseDown = () => {
+      const handleMouseDown = e => {
+        e.stopPropagation()
+        offsetX = e.offsetX
+        offsetY = e.offsetY
+        render()
         isDown = true
       }
       
-      const handleMouseUp = () => {
+      const handleMouseUp = e => {
+        e.stopPropagation()
         setDraw(draws => [...draws, ...drawData])
         isDown = false
       }
       
       const handleMouseMove = e => {
+        e.stopPropagation()
         if (isDown) {
           offsetX = e.offsetX
           offsetY = e.offsetY
@@ -262,14 +272,22 @@ const CanvasComponent = () => {
   }, [refCanvas, draws, draw])
 
   return (
-    <Body>      
-      <Canvas ref={refCanvas}></Canvas>
-      <Button 
-        onClick={async () => {  
-          const drawData = draw.map(d => d.x+','+d.y).join(',')
-          addDraw(drawData)
-        }}
-      >Draw BlockChain</Button>
+    <Body drag>      
+      <Canvas onPointerDownCapture={(e) => e.stopPropagation()} ref={refCanvas}></Canvas>
+      <Navigation>
+        <Button 
+          onClick={async () => {  
+            const drawData = draw.map(d => d.x+','+d.y).join(',')
+            addDraw(drawData)
+          }}
+        >Draw BlockChain</Button>
+        <Button
+          style={{ marginLeft: '10px' }} 
+          onClick={async () => {  
+            setDraw([])
+          }}
+        >Clean</Button>
+      </Navigation>
     </Body>
   )
 }

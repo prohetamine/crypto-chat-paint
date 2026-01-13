@@ -7,6 +7,7 @@ import { styled } from 'styled-components'
 import { motion } from 'framer-motion'
 import Chat from './chat.jsx'
 import Profile from './profile.jsx'
+import CanvasComponent from './Canvas.jsx'
 
 const Body = styled.div`
   width: 100%;
@@ -42,6 +43,7 @@ const App = () => {
       <WalletButton onClick={() => open()}>{isConnected ? 'Wallet' : 'Connect wallet'}</WalletButton>
       <Profile />
       <Chat />
+      <CanvasComponent />
     </Body>
   )
 }

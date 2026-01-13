@@ -8,6 +8,7 @@ import { BrowserProvider, Contract } from 'ethers'
 import { styled } from 'styled-components'
 import sleep from 'sleep-promise'
 import config from './config'
+import MiniCanvas from './mini-canvas.jsx'
 
 const Body = styled.div`
   position: absolute;
@@ -197,6 +198,10 @@ const Chat = () => {
           const authorAddress = await getMessageAuthorAddress(i)
           if (message.text !== '') {
             i++
+            if (i === 100) {
+              i = 0
+              f = 0
+            }
             setNames(names => names.find(name => name.authorAddress === authorAddress) ? names : [...names, { authorAddress, author: undefined }])
             setMessages(messages => [...messages, { ...message, authorAddress }].sort((a, b) => a.ts - b.ts))
           }
@@ -230,11 +235,28 @@ const Chat = () => {
           messages.map(message => {
             const color = `hsl(${parseInt(message.authorAddress.slice(2),16)%360},70%,50%)`;
 
+            let address = null
+              , index = null
+            
+            if (message.text.match(/Draw in canvas/)) {
+              const [_address, _index] = message.text.replace(/Draw in canvas /, '').split(' ')
+              address = _address
+              index = _index
+            }
+
             return (
               <Message key={message.ts} style={message.authorAddress === address ? { marginLeft: 'auto', background: '#ffffffff' } : {}}>
                 <Author style={{ color: color }}>
                   {message.authorAddress === address ? '' : `${(names.find(names => names.authorAddress === message.authorAddress)?.author || 'load...')}:`}
-                  <Text style={message.authorAddress === address ? { marginLeft: '0px' } : {}}>{message.text}</Text>
+                  {
+                    address 
+                      ? (
+                        <MiniCanvas address={address} index={index} />
+                      )
+                      : (
+                        <Text style={message.authorAddress === address ? { marginLeft: '0px' } : {}}>{message.text}</Text>
+                      )
+                  }
                 </Author>
               </Message>
             )

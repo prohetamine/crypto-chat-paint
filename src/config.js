@@ -8,7 +8,10 @@ const contractAddress = '0x12a342968A15B44cde89202CFfbcF90D621Dc366'
 const contractABI = [
   'function getAuthorByAddress(address _address) view returns (string)',
   'function getMessage(uint8 _index) view returns (string)',
+  'function getDraw(uint256 _index) view returns (string)',
   'function getMessageAuthorAddress(uint8 _index) view returns (address)',
+  'function getDrawAuthorAddress(uint256 _index) view returns (address)',
+  'function addDraw(string calldata draw) public',
   'function addMessage(string calldata _message) public',
   'function setAuthorname(string calldata name) public'
 ]

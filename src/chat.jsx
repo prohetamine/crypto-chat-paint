@@ -164,9 +164,18 @@ const Chat = () => {
 
   const addMessage = async text => {
     try {
+      if (window.blockDoubleClickAddMessage) {
+        return
+      }
+      window.blockDoubleClickAddMessage = true
       const contract = await createCallContract()
-      if (!contract) return
+      if (!contract) {
+        window.blockDoubleClickAddMessage = false        
+        return
+      }
       await contract.addMessage(text)
+      window.blockDoubleClickAddMessage = false
+      return true
     } catch (e) {
       console.log(e)
     }
@@ -271,8 +280,10 @@ const Chat = () => {
         />
         <Button 
           onClick={async () => {
-            await addMessage(message)
-            setMessage('')
+            const isSend = await addMessage(message)
+            if (isSend) {
+              setMessage('')
+            }
           }}
         >SEND</Button>
       </Navigation>

@@ -115,9 +115,18 @@ const CanvasComponent = () => {
 
   const addDraw = async drawData => {
     try {
+      if (window.blockDoubleClickAddDraw) {
+        return
+      }
+      window.blockDoubleClickAddDraw = true
       const contract = await createCallContract()
-      if (!contract) return
+      if (!contract) {
+        window.blockDoubleClickAddDraw = true
+        return
+      }
       await contract.addDraw(drawData)
+      window.blockDoubleClickAddDraw = true
+      return true
     } catch (e) {
       console.log(e)
     }
@@ -297,8 +306,10 @@ const CanvasComponent = () => {
         <Button 
           onClick={async () => {  
             const drawData = `${draw.map(d => d.x+','+d.y).join(',')},${selectColor}`
-            await addDraw(drawData)
-            setDraw([])
+            const isSend = await addDraw(drawData)
+            if (isSend) {
+              setDraw([])
+            }
           }}
         >Draw BlockChain</Button>
         <Button

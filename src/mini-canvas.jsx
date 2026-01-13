@@ -99,8 +99,8 @@ const MiniCanvas = ({ address: _address, index }) => {
     const node = refCanvas.current
 
     if (node) {
-      node.width = 100
-      node.height = 100
+      node.width = 40
+      node.height = 40
 
       const blockHeight = node.height / 20
           , blockWidth = node.height / 20

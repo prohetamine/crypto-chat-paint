@@ -11,6 +11,7 @@ import config from './config'
 const Canvas = styled.canvas`
   background: #21ff4a1c;
   border: 1px solid #32ff6fd4;
+  background:#676;
 `
 
 const MiniCanvas = ({ address: _address, index }) => {
@@ -63,6 +64,11 @@ const MiniCanvas = ({ address: _address, index }) => {
         const authorAddress = await getDrawAuthorAddress(index)
         
         const dd = draw.data.split(',').reduce((ctx, elem) => {
+          if (parseInt(elem) !== elem-0) {
+            ctx.push({ color: elem })
+            return ctx
+          }
+
           if (ctx[ctx.length - 1].x === undefined) {
             ctx[ctx.length - 1] = { ...ctx[ctx.length - 1], x: parseInt(elem) }
             return ctx
@@ -109,21 +115,14 @@ const MiniCanvas = ({ address: _address, index }) => {
       const render = () => {
         ctx.clearRect(0, 0, node.width, node.height)
 
-        ctx.fillStyle = '#444'
-
-        for (let x = blockWidth; x < node.width; x += blockWidth) {
-          ctx.fillRect(x, 0, 1, node.width)
-        }
-
-        for (let y = blockHeight; y <  node.height; y += blockHeight) {
-          ctx.fillRect(0, y, node.height, 1)
-        }
-
-        ctx.fillStyle = '#000'
-
-        draw.data.forEach(draw => {
-          ctx.fillRect((draw.x / origblockWidth) * blockHeight, (draw.y / origblockHeight) * blockWidth, blockWidth, blockHeight)
-        })
+        const { color } = draw.data[draw.data.length - 1] || ({ color: '#fff' })
+        const _color = ['#fff', '#000', 'red', 'blue', 'green'].find(_color => _color === color) || '#fff'
+        ctx.fillStyle = _color
+        draw.data.forEach(draw => 
+          _color === '#000'
+            ? ctx.clearRect((draw.x / origblockWidth) * blockHeight, (draw.y / origblockHeight) * blockWidth, blockWidth, blockHeight)  
+            : ctx.fillRect((draw.x / origblockWidth) * blockHeight, (draw.y / origblockHeight) * blockWidth, blockWidth, blockHeight)
+        )
       }
 
       render()

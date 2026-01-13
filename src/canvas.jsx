@@ -33,6 +33,7 @@ const Button = styled.button`
   box-sizing: border-box;
   font-family: "SUSE Mono", sans-serif;
   font-size: 13px;
+  min-width: 40px;
 `
 
 const Navigation = styled(motion.div)`
@@ -51,6 +52,7 @@ const CanvasComponent = () => {
 
   const [names, setNames] = useState([])
       , [draw, setDraw] = useState([])
+      , [selectColor, setSelectColor] = useState('#fff')
       , [draws, setDraws] = useState([])
 
   const createCallContract = async (isNotConnected = false) => {
@@ -154,6 +156,11 @@ const CanvasComponent = () => {
             setNames(names => names.find(name => name.authorAddress === authorAddress) ? names : [...names, { authorAddress, author: undefined }])
             setDraws(draws => {
               const dd = draw.data.split(',').reduce((ctx, elem) => {
+                if (parseInt(elem) !== elem-0) {
+                  ctx.push({ color: elem })
+                  return ctx
+                }
+
                 if (ctx[ctx.length - 1].x === undefined) {
                   ctx[ctx.length - 1] = { ...ctx[ctx.length - 1], x: parseInt(elem) }
                   return ctx
@@ -163,7 +170,6 @@ const CanvasComponent = () => {
                   ctx[ctx.length - 1] = { ...ctx[ctx.length - 1], y: parseInt(elem) }
                   return ctx
                 }
-                
                 
                 ctx.push({ x: parseInt(elem) })
 
@@ -205,24 +211,27 @@ const CanvasComponent = () => {
       const render = () => {
         ctx.clearRect(0, 0, node.width, node.height)
 
-        ctx.fillStyle = '#ccc'
-
-        for (let x = blockWidth; x < node.width; x += blockWidth) {
-          ctx.fillRect(x, 0, 1, node.width)
-        }
-
-        for (let y = blockHeight; y <  node.height; y += blockHeight) {
-          ctx.fillRect(0, y, node.height, 1)
-        }
-
-        ctx.fillStyle = '#fff'
-
-        ;[...draws.map(draw => draw.data).flat(), ...draw, ...drawData].forEach(draw => {
-          ctx.fillRect(draw.x, draw.y, blockWidth, blockHeight)
+        draws.map(draw => draw.data).forEach(chunk => {
+          const { color } = chunk[chunk.length - 1] || { color: '#fff' }
+          const _color = ['#fff', '#000', 'red', 'blue', 'green'].find(_color => _color === color) || '#fff'
+          ctx.fillStyle = _color
+          chunk.forEach(draw => 
+            _color === '#000' 
+              ? ctx.clearRect(draw.x, draw.y, blockWidth, blockHeight) 
+              : ctx.fillRect(draw.x, draw.y, blockWidth, blockHeight)
+          )
         })
 
-        for (let x = blockWidth; x < node.width; x += blockWidth) {
-          for (let y = blockHeight; y < node.height; y += blockHeight) {
+        ctx.fillStyle = selectColor
+        
+        ;[...draw, ...drawData].forEach(draw => {
+          selectColor === '#000'
+            ? ctx.clearRect(draw.x, draw.y, blockWidth, blockHeight)
+            : ctx.fillRect(draw.x, draw.y, blockWidth, blockHeight)
+        })
+
+        for (let x = 0; x < node.width; x += blockWidth) {
+          for (let y = 0; y < node.height; y += blockHeight) {
             if (
               offsetX > x && offsetX < x + blockWidth &&
               offsetY > y && offsetY < y + blockHeight
@@ -269,16 +278,24 @@ const CanvasComponent = () => {
         node.removeEventListener('mousemove', handleMouseMove)
       }
     }
-  }, [refCanvas, draws, draw])
+  }, [refCanvas, draws, draw, selectColor])
 
   return (
     <Body drag>      
       <Canvas onPointerDownCapture={(e) => e.stopPropagation()} ref={refCanvas}></Canvas>
       <Navigation>
+        <Button style={{ background: '#fff' }} onClick={async () => setSelectColor('#fff')}>{selectColor === '#fff' ? '●' : ''}</Button>
+        <Button style={{ marginLeft: '10px', background: '#000' }} onClick={async () => setSelectColor('#000')}>{selectColor === '#000' ? '●' : ''}</Button>
+        <Button style={{ marginLeft: '10px', background: 'red' }} onClick={async () => setSelectColor('red')}>{selectColor === 'red' ? '●' : ''}</Button>
+        <Button style={{ marginLeft: '10px', background: 'green' }} onClick={async () => setSelectColor('green')}>{selectColor === 'green' ? '●' : ''}</Button>
+        <Button style={{ marginLeft: '10px', background: 'blue' }} onClick={async () => setSelectColor('blue')}>{selectColor === 'blue' ? '●' : ''}</Button>
+      </Navigation>
+      <Navigation>
         <Button 
           onClick={async () => {  
-            const drawData = draw.map(d => d.x+','+d.y).join(',')
-            addDraw(drawData)
+            const drawData = `${draw.map(d => d.x+','+d.y).join(',')},${selectColor}`
+            await addDraw(drawData)
+            setDraw([])
           }}
         >Draw BlockChain</Button>
         <Button
@@ -287,7 +304,7 @@ const CanvasComponent = () => {
             setDraw([])
           }}
         >Clean</Button>
-      </Navigation>
+      </Navigation> 
     </Body>
   )
 }

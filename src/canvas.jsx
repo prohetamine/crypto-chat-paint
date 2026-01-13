@@ -307,7 +307,10 @@ const CanvasComponent = () => {
       <Navigation>
         <Button 
           onClick={async () => {  
-            const drawData = `${draw.map(d => d.x+','+d.y).join(',')},${selectColor}`
+            const drawData = `${Object.keys(draw.map(d => d.x+','+d.y).reduce((ctx, coord) => {
+              ctx[coord] = true 
+              return ctx
+            }, {})).join(',')},${selectColor}`
             const isSend = await addDraw(drawData)
             if (isSend) {
               setDraw([])

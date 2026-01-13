@@ -28,12 +28,12 @@ const Button = styled.button`
   border: none;
   outline: none;
   height: 30px;
+  min-width: 30px;
   border-radius: 4px;
   padding: 6px 8px;
   box-sizing: border-box;
   font-family: "SUSE Mono", sans-serif;
   font-size: 13px;
-  min-width: 40px;
 `
 
 const Navigation = styled(motion.div)`
@@ -213,7 +213,7 @@ const CanvasComponent = () => {
 
         draws.map(draw => draw.data).forEach(chunk => {
           const { color } = chunk[chunk.length - 1] || { color: '#fff' }
-          const _color = ['#fff', '#000', 'red', 'blue', 'green', 'pink', '#f3dc1d'].find(_color => _color === color) || '#fff'
+          const _color = ['#fff', '#000', 'red', 'blue', 'green', 'pink', '#f3dc1d', '#909'].find(_color => _color === color) || '#fff'
           ctx.fillStyle = _color
           chunk.forEach(draw => 
             _color === '#000' 
@@ -288,6 +288,7 @@ const CanvasComponent = () => {
         <Button style={{ marginLeft: '10px', background: '#000' }} onClick={async () => setSelectColor('#000')}>{selectColor === '#000' ? '●' : ''}</Button>
         <Button style={{ marginLeft: '10px', background: 'red' }} onClick={async () => setSelectColor('red')}>{selectColor === 'red' ? '●' : ''}</Button>
         <Button style={{ marginLeft: '10px', background: 'green' }} onClick={async () => setSelectColor('green')}>{selectColor === 'green' ? '●' : ''}</Button>
+        <Button style={{ marginLeft: '10px', background: '#909' }} onClick={async () => setSelectColor('#909')}>{selectColor === '#909' ? '●' : ''}</Button>
         <Button style={{ marginLeft: '10px', background: 'blue' }} onClick={async () => setSelectColor('blue')}>{selectColor === 'blue' ? '●' : ''}</Button>
         <Button style={{ marginLeft: '10px', background: 'pink' }} onClick={async () => setSelectColor('pink')}>{selectColor === 'pink' ? '●' : ''}</Button>
         <Button style={{ marginLeft: '10px', background: '#f3dc1d' }} onClick={async () => setSelectColor('#f3dc1d')}>{selectColor === '#f3dc1d' ? '●' : ''}</Button>

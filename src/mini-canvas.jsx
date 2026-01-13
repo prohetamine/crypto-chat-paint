@@ -116,7 +116,7 @@ const MiniCanvas = ({ address: _address, index, onRemove }) => {
         ctx.clearRect(0, 0, node.width, node.height)
 
         const { color } = draw.data[draw.data.length - 1] || ({ color: '#fff' })
-        const _color = ['#fff', '#000', 'red', 'blue', 'green', 'pink', '#f3dc1d'].find(_color => _color === color) || '#fff'
+        const _color = ['#fff', '#000', 'red', 'blue', 'green', 'pink', '#f3dc1d', '#909'].find(_color => _color === color) || '#fff'
         ctx.fillStyle = _color
         draw.data.forEach(draw => 
           _color === '#000'

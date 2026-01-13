@@ -179,7 +179,7 @@ const CanvasComponent = () => {
             })
           }
         }
-      }, 10)
+      }, 250)
 
       return () => clearInterval(intervalId)
     }

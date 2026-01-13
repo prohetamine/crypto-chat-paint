@@ -206,7 +206,7 @@ const Chat = () => {
             setMessages(messages => [...messages, { ...message, authorAddress }].sort((a, b) => a.ts - b.ts))
           }
         }
-      }, 10)
+      }, 250)
 
       return () => clearInterval(intervalId)
     }

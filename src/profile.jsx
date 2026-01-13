@@ -82,11 +82,21 @@ const Profile = () => {
 
   const setAuthor = async name => {
      try {
+      if (window.blockDoubleClickSetAuthor) {
+        return
+      }
+      window.blockDoubleClickSetAuthor = true
       const contract = await createCallContract()
-      if (!contract) return
+      if (!contract) {
+        window.blockDoubleClickSetAuthor = false
+        return
+      }
       await contract.setAuthorname(name)
+      return true
     } catch (e) {
+      alert('Error')
       console.log(e)
+      window.blockDoubleClickSetAuthor = false
      }
   }
 
@@ -114,9 +124,11 @@ const Profile = () => {
         />
         <Button 
           onClick={async () => {
-            await setAuthor(name)
-            await sleep(3000)
-            setWriteNewName(false)
+            const isWrite = await setAuthor(name)
+            if (isWrite) {
+              await sleep(1000)
+              setWriteNewName(false)
+            }
           }}
         >save</Button>
       </Navigation>

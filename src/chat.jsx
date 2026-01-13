@@ -178,6 +178,8 @@ const Chat = () => {
       return true
     } catch (e) {
       console.log(e)
+      alert('Error')
+      window.blockDoubleClickAddMessage = false
     }
   }
 

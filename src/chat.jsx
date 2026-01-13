@@ -235,12 +235,12 @@ const Chat = () => {
           messages.map(message => {
             const color = `hsl(${parseInt(message.authorAddress.slice(2),16)%360},70%,50%)`;
 
-            let address = null
+            let $address = null
               , index = null
             
             if (message.text.match(/Draw in canvas/)) {
               const [_address, _index] = message.text.replace(/Draw in canvas /, '').split(' ')
-              address = _address
+              $address = _address
               index = _index
             }
 
@@ -249,9 +249,9 @@ const Chat = () => {
                 <Author style={{ color: color }}>
                   {message.authorAddress === address ? '' : `${(names.find(names => names.authorAddress === message.authorAddress)?.author || 'load...')}:`}
                   {
-                    address 
+                    $address 
                       ? (
-                        <MiniCanvas address={address} index={index} />
+                        <MiniCanvas address={$address} index={index} />
                       )
                       : (
                         <Text style={message.authorAddress === address ? { marginLeft: '0px' } : {}}>{message.text}</Text>
